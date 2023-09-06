@@ -1,5 +1,5 @@
 "use client";
-
+import axios from 'axios'
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { FileUpload } from "../file-upload";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -55,7 +56,7 @@ export const InitialModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-  
+      await axios.post('/api/servers', values)
       form.reset();
       router.refresh();
       window.location.reload();
@@ -89,7 +90,10 @@ export const InitialModal = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                       
+                       <FileUpload  
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}/> 
                       </FormControl>
                     </FormItem>
                   )}
